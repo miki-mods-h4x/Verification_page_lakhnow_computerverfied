@@ -46,7 +46,7 @@
         <div class="space-y-4 mb-6">
             <div>
                 <label for="searchInput" class="block text-xs uppercase tracking-wider mb-1.5 text-gray-600 font-bold">Enter Roll Number or Certificate ID:</label>
-                <input type="text" id="searchInput" placeholder="e.g. 6121935" class="w-full bg-gray-50 border border-gray-300 text-gray-900 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 uppercase text-sm font-medium transition-all">
+                <input type="text" id="searchInput" placeholder="e.g. 457685" class="w-full bg-gray-50 border border-gray-300 text-gray-900 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 uppercase text-sm font-medium transition-all">
             </div>
             
             <div>
@@ -81,7 +81,9 @@
                 <!-- Details Table -->
                 <div class="w-full text-xs md:text-sm space-y-2.5">
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Roll Number:</span> <span id="sRoll" class="text-gray-900 font-bold"></span></div>
+                    <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Registration No:</span> <span id="sReg" class="text-gray-900 font-bold"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Student Name:</span> <span id="sName" class="text-gray-900 font-bold"></span></div>
+                    <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Father's Name:</span> <span id="sFather" class="text-gray-900 font-bold"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Date of Birth:</span> <span id="sDob" class="text-gray-800 font-medium"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Course Name:</span> <span id="sCourse" class="text-gray-800 font-medium"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Duration:</span> <span id="sDuration" class="text-gray-800"></span></div>
@@ -98,7 +100,7 @@
                 </div>
             </div>
 
-            <!-- Download Buttons with ✅ Checkmark Icon -->
+            <!-- Download Buttons -->
             <div class="p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row gap-3 justify-end">
                 <button onclick="downloadCertificate()" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
                     ✅ Download Certificate
@@ -171,14 +173,16 @@
 
                 if (foundStudent) {
                     currentStudent = foundStudent;
-                    document.getElementById('sRoll').innerText = foundStudent.rollNo || foundStudent.id;
-                    document.getElementById('sName').innerText = foundStudent.name;
-                    document.getElementById('sDob').innerText = foundStudent.dob;
-                    document.getElementById('sCourse').innerText = foundStudent.courseName;
-                    document.getElementById('sDuration').innerText = foundStudent.courseDuration;
-                    document.getElementById('sCentreName').innerText = foundStudent.centreName;
-                    document.getElementById('sCentreAddress').innerText = foundStudent.centreAddress;
-                    document.getElementById('studentPhoto').src = foundStudent.photoUrl;
+                    document.getElementById('sRoll').innerText = foundStudent.rollNo || foundStudent.id || 'N/A';
+                    document.getElementById('sReg').innerText = foundStudent.regNo || foundStudent.registrationNo || 'N/A';
+                    document.getElementById('sName').innerText = foundStudent.name || 'N/A';
+                    document.getElementById('sFather').innerText = foundStudent.fatherName || foundStudent["father's name"] || foundStudent.fathersName || 'N/A';
+                    document.getElementById('sDob').innerText = foundStudent.dob || 'N/A';
+                    document.getElementById('sCourse').innerText = foundStudent.courseName || 'N/A';
+                    document.getElementById('sDuration').innerText = foundStudent.courseDuration || 'N/A';
+                    document.getElementById('sCentreName').innerText = foundStudent.centreName || 'N/A';
+                    document.getElementById('sCentreAddress').innerText = foundStudent.centreAddress || 'N/A';
+                    document.getElementById('studentPhoto').src = foundStudent.photoUrl || '';
                     
                     resultBox.classList.remove('hidden');
                     setTimeout(() => resultBox.classList.remove('opacity-0'), 50);
