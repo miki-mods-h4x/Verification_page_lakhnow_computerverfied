@@ -8,44 +8,73 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <style>
+        @keyframes pulseGlow {
+            0% { opacity: 0.85; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.01); }
+            100% { opacity: 0.85; transform: scale(1); }
+        }
+        .animated-subtext {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- Official Header with Stylish Big Design Text -->
+    <!-- Official Header with Stylish Big Design Text & Verified Badge -->
     <header class="bg-white border-b border-gray-200 shadow-sm py-8 px-4 text-center">
         <div class="max-w-4xl mx-auto">
             <h1 class="text-3xl md:text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-indigo-800 to-blue-600 uppercase drop-shadow-sm">
                 Lucknow Computer Academy
             </h1>
-            <p class="text-xs md:text-sm text-gray-500 font-semibold tracking-widest mt-2 uppercase">
-                // Official Certificate & Marksheet Verification Cloud Portal
-            </p>
+            <div class="flex items-center justify-center gap-2 mt-2">
+                <p class="text-xs md:text-sm text-blue-700 font-bold tracking-widest uppercase animated-subtext">
+                    Official Certificate and Marksheet Verification Portal
+                </p>
+                <!-- Verified Blue Tick -->
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.99 15l-4.5-4.5 1.41-1.41L10.01 14.17l7.59-7.59 1.41 1.41-9 9z"/>
+                </svg>
+            </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <main class="max-w-2xl w-full mx-auto my-10 p-6 md:p-8 bg-white border border-gray-200 rounded-xl shadow-md">
         
-        <!-- Search Section -->
-        <div class="mb-6">
-            <label for="searchInput" class="block text-xs uppercase tracking-wider mb-2 text-gray-600 font-bold">Enter Roll Number or Certificate ID:</label>
-            <div class="flex gap-2">
+        <!-- Search & DOB Section -->
+        <div class="space-y-4 mb-6">
+            <div>
+                <label for="searchInput" class="block text-xs uppercase tracking-wider mb-1.5 text-gray-600 font-bold">Enter Roll Number or Certificate ID:</label>
                 <input type="text" id="searchInput" placeholder="e.g. 6121935" class="w-full bg-gray-50 border border-gray-300 text-gray-900 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 uppercase text-sm font-medium transition-all">
-                <button onclick="verifyStudent()" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-6 py-3 rounded-lg transition-all shadow-sm text-sm cursor-pointer">Search</button>
             </div>
+            
+            <div>
+                <label for="dobInput" class="block text-xs uppercase tracking-wider mb-1.5 text-gray-600 font-bold">Date of Birth (DOB):</label>
+                <input type="date" id="dobInput" class="w-full bg-gray-50 border border-gray-300 text-gray-900 px-4 py-3 rounded-lg focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm font-medium transition-all">
+            </div>
+
+            <button onclick="verifyStudent()" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-3.5 rounded-lg transition-all shadow-sm text-sm cursor-pointer tracking-wide">
+                Verify Record
+            </button>
         </div>
 
         <!-- Loader -->
         <div id="loader" class="hidden flex flex-col items-center justify-center py-8 space-y-3">
             <div class="w-10 h-10 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
-            <p class="text-xs text-gray-500 font-medium">Fetching from Cloud Database...</p>
+            <p class="text-xs text-gray-500 font-medium">Fetching secure record from Firebase...</p>
         </div>
 
         <!-- Result Box -->
         <div id="resultContainer" class="hidden transition-all duration-300 opacity-0 border border-gray-300 rounded-lg bg-white overflow-hidden shadow-sm">
-            <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
-                <span class="text-xs font-bold text-blue-900 uppercase tracking-wider">Verification Successful</span>
-                <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-medium">Status: Genuine Record</span>
+            <div class="bg-blue-50 px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+                <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-blue-900 uppercase tracking-wider">Verification Successful</span>
+                    <svg class="w-4 h-4 text-blue-600 inline-block" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.99 15l-4.5-4.5 1.41-1.41L10.01 14.17l7.59-7.59 1.41 1.41-9 9z"/>
+                    </svg>
+                </div>
+                <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-semibold">Genuine Record</span>
             </div>
             
             <div class="flex flex-col md:flex-row p-5 gap-6 items-center">
@@ -53,6 +82,7 @@
                 <div class="w-full text-xs md:text-sm space-y-2.5">
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Roll Number:</span> <span id="sRoll" class="text-gray-900 font-bold"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Student Name:</span> <span id="sName" class="text-gray-900 font-bold"></span></div>
+                    <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Date of Birth:</span> <span id="sDob" class="text-gray-800 font-medium"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Course Name:</span> <span id="sCourse" class="text-gray-800 font-medium"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Duration:</span> <span id="sDuration" class="text-gray-800"></span></div>
                     <div class="flex border-b border-gray-100 pb-2"><span class="w-36 text-gray-500 font-semibold">Training Centre:</span> <span id="sCentreName" class="text-gray-800"></span></div>
@@ -68,20 +98,20 @@
                 </div>
             </div>
 
-            <!-- Download Buttons -->
+            <!-- Download Buttons with ✅ Checkmark Icon -->
             <div class="p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row gap-3 justify-end">
-                <button onclick="downloadCertificate()" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
-                    📥 Download Certificate
+                <button onclick="downloadCertificate()" class="bg-white hover:bg-gray-100 border border-gray-300 text-gray-700 px-4 py-2.5 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                    ✅ Download Certificate
                 </button>
-                <button onclick="downloadMarksheet()" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
-                    📥 Download Marksheet
+                <button onclick="downloadMarksheet()" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2.5 rounded-lg text-xs font-semibold transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer">
+                    ✅ Download Marksheet
                 </button>
             </div>
         </div>
 
         <!-- Error Box -->
         <div id="errorContainer" class="hidden text-red-600 text-center py-4 border border-red-200 bg-red-50 rounded-lg text-xs font-medium">
-            ⚠️ No record found matching this Roll Number or Certificate ID in our database.
+            ⚠️ Invalid Roll Number or Date of Birth. Please verify your details in the database.
         </div>
     </main>
 
@@ -90,9 +120,8 @@
         &copy; 2026 Lucknow Computer Academy. All Rights Reserved.
     </footer>
 
-    <!-- Firebase Configuration & Execution Script -->
+    <!-- Firebase Script & Logic -->
     <script>
-        // Aapka official Firebase configuration yahan set kar diya gaya hai
         const firebaseConfig = {
             apiKey: "AIzaSyB9BilOzYbJ07M0x1lICNNk2Vlzc96lf1o",
             authDomain: "students-c0c55.firebaseapp.com",
@@ -103,7 +132,6 @@
             measurementId: "G-CRZ968JDR6"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -111,25 +139,30 @@
 
         async function verifyStudent() {
             const query = document.getElementById('searchInput').value.trim().toUpperCase();
+            const dobQuery = document.getElementById('dobInput').value.trim();
             const resultBox = document.getElementById('resultContainer');
             const errorBox = document.getElementById('errorContainer');
             const loader = document.getElementById('loader');
 
-            if (!query) return;
+            if (!query || !dobQuery) {
+                alert("Please enter both Roll Number and Date of Birth.");
+                return;
+            }
 
             resultBox.classList.add('hidden', 'opacity-0');
             errorBox.classList.add('hidden');
             loader.classList.remove('hidden');
 
             try {
-                // Firestore database ke 'students' collection se data match karna
                 const snapshot = await db.collection("students").get();
                 let foundStudent = null;
 
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    if ((data.rollNo && data.rollNo.toUpperCase() === query) || 
-                        (data.id && data.id.toUpperCase() === query)) {
+                    const matchRoll = (data.rollNo && data.rollNo.toUpperCase() === query) || (data.id && data.id.toUpperCase() === query);
+                    const matchDob = data.dob && data.dob.trim() === dobQuery;
+
+                    if (matchRoll && matchDob) {
                         foundStudent = data;
                     }
                 });
@@ -140,6 +173,7 @@
                     currentStudent = foundStudent;
                     document.getElementById('sRoll').innerText = foundStudent.rollNo || foundStudent.id;
                     document.getElementById('sName').innerText = foundStudent.name;
+                    document.getElementById('sDob').innerText = foundStudent.dob;
                     document.getElementById('sCourse').innerText = foundStudent.courseName;
                     document.getElementById('sDuration').innerText = foundStudent.courseDuration;
                     document.getElementById('sCentreName').innerText = foundStudent.centreName;
